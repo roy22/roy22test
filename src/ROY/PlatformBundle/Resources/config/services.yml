@@ -1,0 +1,4 @@
+services:
+   roy_platform.antispam:
+        class: ROY\PlatformBundle\Antispam\ROYAntispam
+        arguments: ["@mailer", "%locale%", 50]

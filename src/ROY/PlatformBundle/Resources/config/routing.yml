@@ -1,0 +1,43 @@
+roy_platform_home:
+    path:     /
+    defaults:
+        _controller: ROYPlatformBundle:Advert:index
+        page: 1
+    requirements:
+        page: \d*
+
+roy_platform_view:
+    path:     /view/{id}
+    defaults: 
+        _controller: ROYPlatformBundle:Advert:view
+    requirements:
+        id: \d+
+        
+roy_platform_add:
+    path:     /add
+    defaults:
+        _controller: ROYPlatformBundle:Advert:add
+
+roy_platform_edit:
+    path:     /edit/{id}
+    defaults: 
+        _controller: ROYPlatformBundle:Advert:edit
+
+roy_platform_delete:
+    path:     /delete/{id}
+    defaults: 
+        _controller: ROYPlatformBundle:Advert:delete
+    requirements:
+        id: \d+
+    
+
+
+roy_platform_view_slug:
+    path: /{year}/{slug}.{format}
+    defaults: 
+        _controller: ROYPlatformBundle:Advert:viewSlug
+        format: html
+    requirements:
+        year: \d{4}
+        format: html|xml
+    

@@ -1,0 +1,15 @@
+{% extends "ROYPlatformBundle::layout.html.twig" %}
+
+{% block title %}
+	Modifier annonce - {{ parent() }}
+{% endblock %}
+
+{% block royplatform_body %}
+
+	<h2>Nouvelle annonce</h2>
+	
+	{{ include("ROYPlatformBundle:Advert:form.html.twig") }}
+	
+
+
+{% endblock %}

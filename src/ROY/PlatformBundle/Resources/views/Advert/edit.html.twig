@@ -1,0 +1,24 @@
+{% extends "ROYPlatformBundle::layout.html.twig" %}
+
+{% block title %}
+	Modifier annonce - {{ parent() }}
+{% endblock %}
+
+{% block royplatform_body %}
+
+	<h2>Modifier annonce</h2>
+	
+	{{ include("ROYPlatformBundle:Advert:form.html.twig") }}
+	
+	<p>
+		Vous éditez une annonce, ne changez pas l'esprit général !
+	</p>
+	
+	<p>
+		<a href="{{ path('roy_platform_view', {'id':advert.id}) }}" class="btn btn-default">
+			<i class="glyphicon glyphicon-chevron-left"></i>
+			Retour à l'annonce
+		</a>	
+	</p>
+
+{% endblock %}
