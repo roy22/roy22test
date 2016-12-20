@@ -20,7 +20,7 @@ class Advert
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
+	
     /**
      * @var \DateTime
      *
@@ -55,6 +55,16 @@ class Advert
      * @ORM\Column(name="published", type="boolean")
      */
     private $published=true;
+
+	/**
+	 * @ORM\OneToOne(targetEntity="ROY\PlatformBundle\Entity\Image", cascade={"persist"})
+	 */
+	private $image;
+	
+	/**
+	 * @ORM\ManyToMany(targetEntity="ROY\PlatformBundle\Entity\Category", cascade={"persist"})
+	 */
+	private $categories;
 
 
     /**
@@ -185,5 +195,70 @@ class Advert
     public function getPublished()
     {
         return $this->published;
+    }
+
+    /**
+     * Set image
+     *
+     * @param \ROY\PlatformBundle\Entity\Image $image
+     *
+     * @return Advert
+     */
+    public function setImage(\ROY\PlatformBundle\Entity\Image $image = null)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return \ROY\PlatformBundle\Entity\Image
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add category
+     *
+     * @param \ROY\PlatformBundle\Entity\Category $category
+     *
+     * @return Advert
+     */
+    public function addCategory(\ROY\PlatformBundle\Entity\Category $category)
+    {
+        $this->categories[] = $category;
+
+        return $this;
+    }
+
+    /**
+     * Remove category
+     *
+     * @param \ROY\PlatformBundle\Entity\Category $category
+     */
+    public function removeCategory(\ROY\PlatformBundle\Entity\Category $category)
+    {
+        $this->categories->removeElement($category);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCategories()
+    {
+        return $this->categories;
     }
 }

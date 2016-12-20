@@ -40,4 +40,10 @@ roy_platform_view_slug:
     requirements:
         year: \d{4}
         format: html|xml
-    
+
+roy_platform_editimage:
+    path:     /editimage/{id}
+    defaults: 
+        _controller: ROYPlatformBundle:Advert:editImage
+    requirements:
+        id: \d+

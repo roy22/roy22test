@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use ROY\PlatformBundle\Entity\Advert;
+use ROY\PlatformBundle\Entity\Image;
+use ROY\PlatformBundle\Entity\Application;
 
 class AdvertController extends Controller
 {
@@ -33,9 +35,23 @@ class AdvertController extends Controller
     
     public function viewAction($id)
     {
-	    $advert = array('id'=>$id, 'title'=>'Recherche dev Symfony', 'author'=>'Roy22', 'date'=> new \Datetime(), 'content'=>'Nous cherchons un dev d\'ici !' );
+	    //$advert = array('id'=>$id, 'title'=>'Recherche dev Symfony', 'author'=>'Roy22', 'date'=> new \Datetime(), 'content'=>'Nous cherchons un dev d\'ici !' );
 	    
-	    return $this->render('ROYPlatformBundle:Advert:view.html.twig', array('advert'=>$advert));
+	    $entityManager = $this->getDoctrine()->getManager();
+	    
+	    
+	    //l'annonce
+	    $advert= $entityManager->getRepository('ROYPlatformBundle:Advert')->find($id);
+	    if(null===$advert){
+		    throw new NotFoundHttpException("L'annonce " . $id . " n'existe pas");
+	    }
+	    //les candidatures
+	    //$listApplications= $entityManager->getRepository('ROYPlatformBundle:Application')->findBy(array('advert'=>$advert));
+	    $listApplications= $entityManager->getRepository('ROYPlatformBundle:Application')->findByAdvert($advert);
+	    
+	    
+	    //view
+	    return $this->render('ROYPlatformBundle:Advert:view.html.twig', array('advert'=>$advert,'listApplications'=>$listApplications));
     }
     
     
@@ -54,14 +70,34 @@ class AdvertController extends Controller
 
 		//creation de l'entité
 		$advert = new Advert();
-		$advert->setTitle('Recherche Symfony');
+		$advert->setTitle('Recherche dev WP');
 		$advert->setAuthor('Roy22');
-		$advert->setContent('Nous cherchons un dev à montpellier');
+		$advert->setContent('Nous cherchons un dev >P à montpellier');
 		$advert->setDate(new \Datetime());
+		//image
+		$image = new Image();
+		$image->setUrl('http://arobamedia.com/wp-content/uploads/2016/04/logo.png');
+		$image->setAlt('Arobamedia');
+		$advert->setImage($image);
+		//candidature 1
+		$application1 = new Application();
+		$application1->setAuthor('Roy22');
+		$application1->setContent('Je suis fait pour ca');
+		$application1->setDate(new \Datetime());
+		$application1->setAdvert($advert);
+		//candidature 2
+		$application2 = new Application();
+		$application2->setAuthor('Corvisier');
+		$application2->setContent('Je suis le meilleur');
+		$application2->setDate(new \Datetime());
+		$application2->setAdvert($advert);
+		
 		//le gestionnaire
 		$entityManager=$this->getDoctrine()->getManager();
 		//la percistance
 		$entityManager->persist($advert);
+		$entityManager->persist($application1);
+		$entityManager->persist($application2);
 		//la mise jour
 		$entityManager->flush();
 		
@@ -122,5 +158,18 @@ class AdvertController extends Controller
     public function viewSlugAction($year, $slug, $format)
     {
          return new Response("Slug : " . $slug . " - année : " . $year . " - format : " . $format);
+    }
+    
+    public function editImageAction($id){
+	    //le gestionnaire
+		$entityManager=$this->getDoctrine()->getManager();
+		//l'annonce
+		$advert=$entityManager->getRepository('ROYPlatformBundle:Advert')->find($id);
+		//modification de l'url
+		$advert->getImage()->setUrl('http://lxpro.fr/wp-content/themes/lxpro/img/LX_PRO.png');
+		//enregistrement
+		$entityManager->flush();
+		
+		return new Response('OK');
     }
 }
